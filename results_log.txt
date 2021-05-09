@@ -1,0 +1,33 @@
+User input:
+Fury
+Inception
+Interstellar
+Children of Men
+Fight Club
+
+Stats:
+Ratings: [7.6, 8.8, 8.6, 7.9, 8.8]
+Rating Avg: 8.34
+Rating Std: 0.4963869458396345
+Num Ratings: [415279, 456395, 1449256, 1807440, 2002816]
+Num Ratings Avg: 1226237.2
+Num Ratings Std: 669465.2982102657
+Years: [2014.0, 2010.0, 2014.0, 2006.0, 1999.0]
+Years Avg: 2008.6
+Years Std: 5.642694391866353
+Budgets: [63000000.0, 68000000.0, 76000000.0, 160000000.0, 165000000.0]
+Budgets Avg: 106400000.0
+Budgets Std: 46019995.65406325
+Genres: {'Action': 2, 'Drama': 4, 'War': 1, 'Adventure': 3, 'Sci-Fi': 3}
+Directors: {'David Ayer': 1, 'Christopher Nolan': 2, 'Alfonso Cuarón': 1, 'David Fincher': 1}
+Actors: {'Brad Pitt': 2, 'Shia LaBeouf': 1, 'Leonardo DiCaprio': 1, 'Joseph Gordon-Levitt': 1, 'Ellen Burstyn': 1, 'Matthew McConaughey': 1, 'Juan Gabriel Yacuzzi': 1, 'Mishal Husain': 1, 'Edward Norton': 1}
+
+Recommended movies:
+The Lord of the Rings: The Return of the King
+The Lord of the Rings: The Fellowship of the Ring
+The Martian
+The Lord of the Rings: The Two Towers
+Gladiator
+
+-----------------------------------
+
