@@ -10,3 +10,5 @@ Data Cleaner: “MovieRecommender/Scripts/DataCleaner.py”\
   Generates FinalData.csv
 
 Movie Recommender: “MovieRecommender/Scripts/Recommender.py
+
+"pip install -r requirements.txt" to get required packages
