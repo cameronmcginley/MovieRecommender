@@ -69,7 +69,9 @@ def get_movie_inputs(n):
         try:
             num = int(num)
         except:
+            num = 0
             print("Try again")
+            continue
 
 
     print()
