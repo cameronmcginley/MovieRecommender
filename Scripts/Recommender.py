@@ -59,7 +59,47 @@ def get_movie_inputs(n):
         else:
             print("Link must contain title ID of format \"title/tt#######/\"")
 
-    return movie_ids
+
+    print()
+    # Get amount of movies to recommend
+    num = 0
+    while num <= 0 or num > 100:
+        num = input("How many movies to recommend: ")
+
+        try:
+            num = int(num)
+        except:
+            print("Try again")
+
+
+    print()
+    # Get importances from user
+    # Defaults
+    importances = {
+        "rating": 2,
+        "num_ratings": 2,
+        "year": 2,
+        "budgets": 2,
+        "genre_count": 2,
+        "director_count": 2,
+        "actor_count": 2
+    }
+
+    do_customize = input("Modify weights (y/n): ")
+    while do_customize.lower() != 'n' and do_customize.lower() != 'y':
+        do_customize = input("Modify weights (y/n): ")
+
+    if do_customize.lower() == 'y':
+        print("1 = very important, 2 = moderate, 3 = not important")
+        for key in importances:
+            importances[key] = input(key + " (1-3): ")
+            while importances[key] != '1' and importances[key] != '2' and importances[key] != '3':
+                print("Try again")
+                importances[key] = input(key + " (1-3): ")
+
+            importances[key] = int(importances[key])
+
+    return [movie_ids, num, importances]
 
 
 # Gets various statistics from the user input movies
@@ -221,7 +261,7 @@ def calculate_points(df, df_name, stats_name, stats, importances, max_pts, award
     return df
 
 
-def recommend_movie(n, user_selection, df, stats):
+def recommend_movie(n, user_selection, df, stats, importances):
     # Start tracking points for movies inside a new column
     df['points'] = 0
     df['points'] = df['points'].astype('float')
@@ -246,17 +286,6 @@ def recommend_movie(n, user_selection, df, stats):
         df = df[~df.imdb_title_id.str.contains(movie, na=False)]
 
     df = df.reset_index(drop=True)
-
-    # 1 is most important, 3 is least important
-    importances = {
-        "rating": 2,
-        "num_ratings": 2,
-        "year": 2,
-        "budgets": 2,
-        "genre_count": 2,
-        "director_count": 2,
-        "actor_count": 2
-    }
 
     # -----Drop data outside of range specified by importance (std from mean)-----
     df = drop_data_range(df, "avg_vote", "rating", stats, importances["rating"])
@@ -373,7 +402,10 @@ https://www.imdb.com/title/tt0206634/
 https://www.imdb.com/title/tt0137523/
 """
 
-movie_ids = get_movie_inputs(5)
+inputs = get_movie_inputs(5)
+movie_ids = inputs[0]
+num_to_recommend = inputs[1]
+importances = inputs[2]
 
 # Gets dataset from FinalData.csv
 # Must run DataCleaner.py first
@@ -381,4 +413,4 @@ all_movie_data = get_movie_dataset()
 
 input_stats = get_input_stats(movie_ids, all_movie_data)
 
-recommend_movie(10, movie_ids, all_movie_data, input_stats)
+recommend_movie(num_to_recommend, movie_ids, all_movie_data, input_stats, importances)
