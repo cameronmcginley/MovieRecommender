@@ -104,99 +104,63 @@ def get_movie_inputs(n):
     return [movie_ids, num, importances]
 
 
+# Gets list of values of column_name from each movie in movie_ids
+def get_stats_list(df, movie_ids, column_name):
+    return_list = []
+    for movie in movie_ids:
+        value = df.loc[df['imdb_title_id'] == movie][column_name].item()
+        if value:
+            return_list.append(value)
+
+    return return_list
+
+
+def add_counts(val, dict):
+    if val not in dict:
+        dict[val] = 1
+    else:
+        dict[val] += 1
+
+    return dict
+
+
 # Gets various statistics from the user input movies
 # Returns a dictionary with all of the data needed by the recommender
 def get_input_stats(movie_ids, df):
-    # Average ratings
-    ratings = []
-    for movie in movie_ids:
-        ratings.append(df.loc[df['imdb_title_id'] == movie]['avg_vote'].item())
+    # Lists of values of the input movies given by column name
+    ratings = get_stats_list(df, movie_ids, "avg_vote")
+    num_ratings = get_stats_list(df, movie_ids, "votes")
+    years = get_stats_list(df, movie_ids, "year")
+    budgets = get_stats_list(df, movie_ids, "budget")
 
-    rating_mean = np.mean(ratings)
-    rating_std = np.std(ratings)
-
-    # Number of ratings
-    num_ratings = []
-    for movie in movie_ids:
-        num_ratings.append(
-            df.loc[df['imdb_title_id'] == movie]['votes'].item())
-
-    num_ratings_mean = np.mean(num_ratings)
-    num_ratings_std = np.std(num_ratings)
-
-    # Release years
-    years = []
-    for movie in movie_ids:
-        years.append(df.loc[df['imdb_title_id'] == movie]['year'].item())
-
-    year_mean = np.mean(years)
-    year_std = np.std(years)
-
-    # Budgets
-    budgets = []
-    for movie in movie_ids:
-        budget = df.loc[df['imdb_title_id'] == movie]['budget'].item()
-        if budget > 0:
-            # Don't consider if no budget given
-            budgets.append(budget)
-
-    budgets_mean = np.mean(budgets)
-    budgets_std = np.std(budgets)
-
-    # Genres
     genre_count = {}
-
-    # Each movie can have multiple genres
-    # Count the number of each genre as it appears in all of the input movies
-    # Store in dict
-    for movie in movie_ids:
-        for genre in (df.loc[df['imdb_title_id'] == movie]['genre'].item()):
-            if genre not in genre_count:
-                genre_count[genre] = 1
-            else:
-                genre_count[genre] += 1
-
-    # Directors
     director_count = {}
-
-    # Each movie has one director, create a dict for the counts
-    # of how many times a director appears in the input movies
-    for movie in movie_ids:
-        director = df.loc[df['imdb_title_id'] == movie]['director'].item()
-
-        if director not in director_count:
-            director_count[director] = 1
-        else:
-            director_count[director] += 1
-
-    # Actors
     actor_count = {}
 
-    # Each movie can have many actors
-    # Count the number of each actor as it appears in all of the input movies
-    # Only considers the first two actors, as these are the leading actors and
-    # who people will see the most
+    # Get counts of genres, directors, and actors for all input movies
     for movie in movie_ids:
-        # Get first two listed actors, add them to dict
-        for actor in (df.loc[df['imdb_title_id'] == movie]['actors'].item())[0:2]:
-            if actor not in actor_count:
-                actor_count[actor] = 1
-            else:
-                actor_count[actor] += 1
+        for genre in (df.loc[df['imdb_title_id'] == movie]["genre"].item()):
+            genre_count = add_counts(genre, genre_count)
+
+        director = df.loc[df['imdb_title_id'] == movie]["director"].item()
+        director_count = add_counts(director, director_count)
+
+        for actor in (df.loc[df['imdb_title_id'] == movie]["actors"].item())[0:2]:
+            actor_count = add_counts(actor, actor_count)
 
     return {
         "ratings" : ratings,
-        "rating_mean": rating_mean,
-        "rating_std": rating_std,
+        "rating_mean": np.mean(ratings),
+        "rating_std": np.std(ratings),
         "num_ratings": num_ratings,
-        "num_ratings_mean": num_ratings_mean,
-        "num_ratings_std": num_ratings_std,
+        "num_ratings_mean": np.mean(num_ratings),
+        "num_ratings_std": np.std(num_ratings),
         "years": years,
-        "year_mean": year_mean,
-        "year_std": year_std,
+        "year_mean": np.mean(years),
+        "year_std": np.std(years),
         "budgets": budgets,
-        "budgets_mean": budgets_mean,
-        "budgets_std": budgets_std,
+        "budgets_mean": np.mean(budgets),
+        "budgets_std": np.std(budgets),
         "genre_count": genre_count,
         "director_count": director_count,
         "actor_count": actor_count
