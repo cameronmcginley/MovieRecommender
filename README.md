@@ -1,14 +1,12 @@
----DATA---\
-Original Data Source: "MovieRecommender/Data/IMDb movies.csv"\
-This was collected from https://www.kaggle.com/stefanoleone992/imdb-extensive-dataset
+# Movie Recommender
+**Original Data Source:** https://www.kaggle.com/stefanoleone992/imdb-extensive-dataset 
 
-Data Source Created By Cleaning Script: “MovieRecommender/Data/FinalData.csv”
+Scripts/DataCleaner.py generates FinalData.csv
 
-\
----SCRIPTS---\
-Data Cleaner: “MovieRecommender/Scripts/DataCleaner.py”\
-  Generates FinalData.csv
+Scripts/Recommender.py handles everything from gathering user inputs, to dropping movies dissimilar to inputs, to calculating points, to outputting the final n recommendations
 
-Movie Recommender: “MovieRecommender/Scripts/Recommender.py
+Point system awards points to movies based on how well they match the user's favorite/input movies in certain categories. This is done in a few different methods and distributions depending on the category. Before awarding points, data that is very unalike the inputs are dropped completely to speed things up.
 
-"pip install -r requirements.txt" to get required packages
+There are 7 categories in total that points are based on, and users are able to input their preference of weighting for each.
+
+Outputs printed to results_log.txt
