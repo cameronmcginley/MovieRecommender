@@ -186,6 +186,7 @@ def drop_data_range(df, df_name, stats_name, stats, importance):
 def calculate_points(df, df_name, stats_name, stats, importances, max_pts, award_type):
     # Add bonus to max pts
     max_pts = max_pts + importances[stats_name]
+    if max_pts < 0 or importances[stats_name] == -1: max_pts = 0
     min_pts = 0
 
     if award_type == "scale":
@@ -221,7 +222,7 @@ def calculate_points(df, df_name, stats_name, stats, importances, max_pts, award
         for i in df.index:
             for genre in df[df_name][i]:
                 if genre in genres:
-                    points = stats[stats_name][genre] + stats[stats_name][genre]*max_pts
+                    points = stats[stats_name][genre] * max_pts #+ stats[stats_name][genre]*max_pts
                     df["points"][i] += points
 
     return df
@@ -270,7 +271,7 @@ def recommend_movie(n, user_selection, df, stats, importances):
 
     # ---------------------Point Calculations------------------------
     # Rating uses scale to skew points to more favored movies
-    df = calculate_points(df, "avg_vote", "rating", stats, importances, 2, award_type="scale")
+    df = calculate_points(df, "avg_vote", "rating", stats, importances, 1, award_type="scale")
 
     # Num of ratings and budgets awards points to more similar values
     df = calculate_points(df, "votes", "num_ratings", stats, importances, 1, award_type="normal")
@@ -339,7 +340,7 @@ def recommend_movie(n, user_selection, df, stats, importances):
     # ----------------Output Graphs--------------------
     # Print Histogram of points
     df.hist(column='points')
-    plt.title('Point of All Non-Dropped Movies')
+    plt.title('Points of All Non-Dropped Movies')
     plt.xlabel('Points')
     plt.ylabel('Number of Movies')
     plt.show()
