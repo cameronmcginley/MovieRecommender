@@ -360,8 +360,8 @@ def recommend_movie(n, user_selection, df, stats, importances):
     plt.show()
 
 
-# Test set of my favorite movies
 """
+Test set of my favorite movies
 https://www.imdb.com/title/tt2713180/
 https://www.imdb.com/title/tt1375666/
 https://www.imdb.com/title/tt0816692/
@@ -369,15 +369,19 @@ https://www.imdb.com/title/tt0206634/
 https://www.imdb.com/title/tt0137523/
 """
 
-inputs = get_movie_inputs(5)
-movie_ids = inputs[0]
-num_to_recommend = inputs[1]
-importances = inputs[2]
+def main():
+    inputs = get_movie_inputs(5)
+    movie_ids = inputs[0]
+    num_to_recommend = inputs[1]
+    importances = inputs[2]
 
-# Gets dataset from FinalData.csv
-# Must run DataCleaner.py first
-all_movie_data = get_movie_dataset()
+    # Gets dataset from FinalData.csv
+    # Must run DataCleaner.py first
+    all_movie_data = get_movie_dataset()
 
-input_stats = get_input_stats(movie_ids, all_movie_data)
+    input_stats = get_input_stats(movie_ids, all_movie_data)
 
-recommend_movie(num_to_recommend, movie_ids, all_movie_data, input_stats, importances)
+    recommend_movie(num_to_recommend, movie_ids, all_movie_data, input_stats, importances)
+
+if __name__ == '__main__':
+    main()
